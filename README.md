@@ -6,6 +6,7 @@ This configures a free list-hashing service using a serverless Amazon AWS stack.
 The raw data file will be deleted immediately upon processing and the hashed data-file will be deleted after 24 hours.
 
 To get started, you need to have the following:
+
 1. An Amazon AWS account with permissions to manage Lambda, S3, and IAM roles (ensure that your key is properly configured for cli access)
 2. The AWS cli client installed
 3. node.js/npm installed
