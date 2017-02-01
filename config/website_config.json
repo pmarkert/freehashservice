@@ -1,0 +1,8 @@
+{
+    "Bucket": "${S3_BUCKET}",
+    "WebsiteConfiguration": {
+        "IndexDocument": {
+            "Suffix": "index.html"
+        }
+    }
+}

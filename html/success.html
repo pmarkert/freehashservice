@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Free list-hashing service</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://cdn.jsdelivr.net/clipboard.js/1.5.16/clipboard.min.js"></script>
+  </head>
+  <body>
+ <div class="container">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Free list-hashing service</h1>
+        <p>This is a simple and free service to help users automatically create hashed lists from a textfile. The service allows users to upload a text-file. The service will calculate the MD5 checksum for each line of the textfile, and save the results to a downloadable location. The user will be given a link to download the results.</p>
+      </div>
+      <div class="alert alert-success" role="alert">
+        <strong>PROCESSING:</strong> 
+    Your file is currently being hashed and should be available in the next few minutes at: <a id="hashed_link" href=""></a>
+<!-- Trigger -->
+    <img data-clipboard-target="#hashed_link" id="clipper" src="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/svg/clippy.svg" alt="Copy to clipboard">
+      </div>
+<p>If you click the link and get an error message, then the file is probably still being generated. Processing 1 million lines typically takes about 2 minutes. If after 5 minutes your file is not available, then an error has occurred.</p>
+<br/>
+      <div class="alert alert-warning" role="alert">
+        <strong>NOTE:</strong> Only the first 1 million lines will be processed. If you need to hash more than that, you will have to split and upload multiple files.
+      </div>
+<p>This service is provided as a convenience to users, no other guarantees are made, however, to ensure the security and privacy of your data:
+  <ul>
+    <li>The raw uploaded data is deleted immediately upon successful processing.</li>
+    <li>Hashed results are automatically deleted after 24 hours.</li>
+    <li>All file transmissions are performed over SSL connections.</li>
+  </ul>
+</p>
+<p>The source-code and setup instructions for this project are visible on Github at <a href="http://github.com/pmarkert/hashservice">http://github.com/pmarkert/hashservice</a>. The project is hosted inside of Amazon AWS. The equivalent functionality of this service can also be accomplished on a local computer using any Mac or Linux workstation by following the instructions in <a href="http://stackoverflow.com/questions/5890136/hash-each-line-in-text-file">this stackoverflow article</a>. tl;dr - run the following command from a terminal prompt:</p>
+<pre>
+while read line; do echo -n $line|md5; done < file_to_hash.txt >hashed_results.txt
+</pre>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</div>
+    <script language="javascript">
+      function getParameterByName(name, url) {
+          if (!url) {
+            url = window.location.href;
+          }
+          name = name.replace(/[\[\]]/g, "\\$&");
+          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+              results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+      }
+
+      var link = document.getElementById("hashed_link");
+      link.innerText = "https://s3.amazonaws.com/" + getParameterByName("bucket") + "/" + getParameterByName("key").replace(/^upload/, "download") + ".hashed";
+      link.href = link.innerText;
+      var clipper = document.getElementById("clipper");
+      new Clipboard(clipper);
+    </script>
+  </body>
+</html>
