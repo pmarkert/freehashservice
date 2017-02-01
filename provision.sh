@@ -11,11 +11,20 @@ do
 	envsubst '\$S3_BUCKET' <${file} >$TEMP_DIR/html/`basename ${file}`
 done
 echo Temp dir is $TEMP_DIR
-aws s3 mb s3://${S3_BUCKET}
-aws s3api put-bucket-policy --bucket ${S3_BUCKET} --policy file://${TEMP_DIR}/bucket_policy.json
+if aws s3 ls "s3://${S3_BUCKET}" 2>&1 | grep -q 'NoSuchBucket'
+then
+  aws s3 mb s3://${S3_BUCKET}
+  aws s3api put-bucket-policy --bucket ${S3_BUCKET} --policy file://${TEMP_DIR}/bucket_policy.json
+  aws s3api put-bucket-website --cli-input-json file://${TEMP_DIR}/website_config.json
+fi
 aws s3 sync ${TEMP_DIR}/html/ s3://${S3_BUCKET}/ --acl public-read
-aws s3api put-bucket-website --cli-input-json file://${TEMP_DIR}/website_config.json
 cd lambda
 npm install -D
-./node_modules/.bin/claudia create --region us-east-1 --handler index.handler --policies ${TEMP_DIR}/role_policy.json
+if [ ! -f claudia.json ]; then
+  # First time deploy
+  ./node_modules/.bin/claudia create --region us-east-1 --handler index.handler --policies ${TEMP_DIR}/role_policy.json
+else
+  # Existing deployment
+  ./node_modules/.bin/claudia update
+fi
 claudia add-s3-event-source --bucket ${S3_BUCKET} --prefix upload
