@@ -23,8 +23,8 @@ npm install -D
 if [ ! -f claudia.json ]; then
   # First time deploy
   ./node_modules/.bin/claudia create --region us-east-1 --handler index.handler --policies ${TEMP_DIR}/role_policy.json
+  ./node_modules/.bin/claudia add-s3-event-source --bucket ${S3_BUCKET} --prefix upload
 else
   # Existing deployment
   ./node_modules/.bin/claudia update
 fi
-claudia add-s3-event-source --bucket ${S3_BUCKET} --prefix upload
