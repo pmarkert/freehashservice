@@ -43,7 +43,7 @@
     <li>All file transmissions are performed over SSL connections.</li>
   </ul>
 </p>
-<p>The source-code and setup instructions for this project are visible on Github at <a href="http://github.com/pmarkert/hashservice">http://github.com/pmarkert/hashservice</a>. The project is hosted inside of Amazon AWS. The equivalent functionality of this service can also be accomplished on a local computer using any Mac or Linux workstation by following the instructions in <a href="http://stackoverflow.com/questions/5890136/hash-each-line-in-text-file">this stackoverflow article</a>. tl;dr - run the following command from a terminal prompt:</p>
+<p>The source-code and setup instructions for this project are visible on Github at <a href="http://github.com/pmarkert/freehashservice">http://github.com/pmarkert/freehashservice</a>. The project is hosted inside of Amazon AWS. The equivalent functionality of this service can also be accomplished on a local computer using any Mac or Linux workstation by following the instructions in <a href="http://stackoverflow.com/questions/5890136/hash-each-line-in-text-file">this stackoverflow article</a>. tl;dr - run the following command from a terminal prompt:</p>
 <pre>
 while read line; do echo -n $line|shasum -a 256 | awk '{ print $1 }'; done  < file_to_hash.txt >hashed_results.txt
 </pre>
